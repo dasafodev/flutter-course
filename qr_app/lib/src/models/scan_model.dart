@@ -4,7 +4,13 @@ class ScanModel {
         this.id,
         this.tipo,
         this.valor,
-    });
+    }){
+
+      (this.valor.contains('http'))
+      ?this.tipo = 'http'
+      :this.tipo = 'geo';
+      
+    }
 
     int id;
     String tipo;
