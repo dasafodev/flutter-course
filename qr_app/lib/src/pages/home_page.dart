@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('QR App'),
-        actions: <Widget>[
+          actions: <Widget>[
           IconButton(
             icon: Icon(Icons.delete_forever),
             onPressed: () {},
