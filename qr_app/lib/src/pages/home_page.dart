@@ -1,13 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
-import 'package:barcode_scan/barcode_scan.dart';
 import 'package:qr_app/src/bloc/scans_bloc.dart';
 import 'package:qr_app/src/models/scan_model.dart';
 
 import 'package:qr_app/src/pages/directions_page.dart';
+import 'package:qr_app/src/utils/utils.dart' as utils;
 import 'maps_page.dart';
-
-
 
 class HomePage extends StatefulWidget {
   const HomePage({Key key}) : super(key: key);
@@ -17,7 +17,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   final scansBloc = new ScansBloc();
 
   int currentIndex = 0;
@@ -27,11 +26,10 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('QR App'),
-          actions: <Widget>[
+        actions: <Widget>[
           IconButton(
             icon: Icon(Icons.delete_forever),
-            onPressed: scansBloc.deleteAllScans
-            ,
+            onPressed: scansBloc.deleteAllScans,
           )
         ],
       ),
@@ -39,25 +37,31 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: _createBottomNavigationBar(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.filter_center_focus),
-          backgroundColor: Theme.of(context).primaryColor,
-          onPressed: _scanQR,
-
-          ),
+        child: Icon(Icons.filter_center_focus),
+        backgroundColor: Theme.of(context).primaryColor,
+        onPressed:() => _scanQR(context),
+      ),
     );
   }
 
-  _scanQR()async {
-
+  _scanQR(BuildContext context) async {
     //https://fernando-herrera.com
     //geo:40.73255860802501,-73.89333143671877
     dynamic futureString = 'https://fernando-herrera.com';
-    if(futureString !=null){
-
+    if (futureString != null) {
       final scan = ScanModel(valor: futureString);
-      final scan2 = ScanModel(valor: 'geo:40.73255860802501,-73.89333143671877');
+      final scan2 =
+          ScanModel(valor: 'geo:40.73255860802501,-73.89333143671877');
       scansBloc.addScan(scan);
       scansBloc.addScan(scan2);
+
+      if (Platform.isIOS) {
+        Future.delayed(Duration(milliseconds: 750), () {
+          utils.launchScan(context,scan);
+        });
+      } else {
+        utils.launchScan(context,scan);
+      }
     }
     // try {
     //   futureString = await BarcodeScanner.scan();

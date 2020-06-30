@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:qr_app/src/bloc/scans_bloc.dart';
 import 'package:qr_app/src/models/scan_model.dart';
 
+import 'package:qr_app/src/utils/utils.dart' as utils;
+
 class MapsPage extends StatelessWidget {
 
   final scansBloc = new ScansBloc();
@@ -24,8 +26,10 @@ class MapsPage extends StatelessWidget {
             itemBuilder: (context, index) => Dismissible(
                   key: UniqueKey(),
                   background: Container(color: Colors.red),
+                  
                   onDismissed: (direction) => scansBloc.deleteScan(scans[index].id) ,
                   child: ListTile(
+                    onTap: () => utils.launchScan(context,scans[index]) ,
                     leading: Icon(Icons.cloud_queue,
                         color: Theme.of(context).primaryColor),
                     title: Text(scans[index].valor),

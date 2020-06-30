@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qr_app/src/pages/home_page.dart';
+import 'package:qr_app/src/pages/map_page.dart';
 
 // import 'src/pages/directions_page.dart';
 // import 'src/pages/maps_page.dart';
@@ -15,6 +16,7 @@ class MyApp extends StatelessWidget {
       initialRoute: 'home',
       routes: {
         'home'    : (BuildContext context) => HomePage(),
+        'map'    : (BuildContext context) => MapPage(),
         // 'directions'    : (BuildContext context) => DirectionsPage(),
         // 'maps'    : (BuildContext context) => MapsPage(),
       },
