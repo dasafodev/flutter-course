@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
 
 import 'package:qr_app/src/bloc/scans_bloc.dart';
@@ -39,7 +40,7 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.filter_center_focus),
         backgroundColor: Theme.of(context).primaryColor,
-        onPressed:() => _scanQR(context),
+        onPressed: () => _scanQR(context),
       ),
     );
   }
@@ -47,27 +48,26 @@ class _HomePageState extends State<HomePage> {
   _scanQR(BuildContext context) async {
     //https://fernando-herrera.com
     //geo:40.73255860802501,-73.89333143671877
-    dynamic futureString = 'https://fernando-herrera.com';
+
+    dynamic futureString = '';
+    try {
+      futureString = await BarcodeScanner.scan();
+    } catch (e) {
+      futureString = e.toString();
+    }
     if (futureString != null) {
-      final scan = ScanModel(valor: futureString);
-      final scan2 =
-          ScanModel(valor: 'geo:40.73255860802501,-73.89333143671877');
+      final scan = ScanModel(valor: futureString.rawContent);
       scansBloc.addScan(scan);
-      scansBloc.addScan(scan2);
 
       if (Platform.isIOS) {
         Future.delayed(Duration(milliseconds: 750), () {
-          utils.launchScan(context,scan);
+          utils.launchScan(context, scan);
         });
       } else {
-        utils.launchScan(context,scan);
+        utils.launchScan(context, scan);
       }
     }
-    // try {
-    //   futureString = await BarcodeScanner.scan();
-    // } catch (e) {
-    //   futureString = e.toString();
-    // }
+
     // print('Future String: ${futureString.rawContent}');
   }
 

@@ -10,6 +10,9 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
+
+  MapController mapController = new MapController();
+
   @override
   Widget build(BuildContext context) {
 
@@ -19,7 +22,9 @@ class _MapPageState extends State<MapPage> {
       appBar: AppBar(
         title: Text('QR Coordenadas'),
         actions: <Widget>[
-          IconButton(icon: Icon(Icons.my_location), onPressed: () {})
+          IconButton(icon: Icon(Icons.my_location), onPressed: () {
+            mapController.move(scan.getLatLng(), 15);
+          })
         ],
       ),
       body:_createFlutterMap(scan),
@@ -29,6 +34,7 @@ class _MapPageState extends State<MapPage> {
   Widget  _createFlutterMap(ScanModel scan) {
 
     return FlutterMap(
+      mapController: mapController,
       options: MapOptions(
         center: scan.getLatLng(),
         zoom: 10
