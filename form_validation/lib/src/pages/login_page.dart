@@ -118,7 +118,7 @@ class LoginPage extends StatelessWidget {
                 SizedBox(
                   height: 30.0,
                 ),
-                _createButton(),
+                _createButton(bloc),
               ],
             ),
           ),
@@ -144,12 +144,11 @@ class LoginPage extends StatelessWidget {
               keyboardType: TextInputType.emailAddress,
               onChanged: bloc.changeEmail,
               decoration: InputDecoration(
-                icon: Icon(Icons.alternate_email, color: Colors.deepPurple),
-                hintText: 'ejemplo@correo.com',
-                labelText: 'Correo Electronico',
-                counterText: snapshot.data,
-                errorText: snapshot.error
-              )),
+                  icon: Icon(Icons.alternate_email, color: Colors.deepPurple),
+                  hintText: 'ejemplo@correo.com',
+                  labelText: 'Correo Electronico',
+                  counterText: snapshot.data,
+                  errorText: snapshot.error)),
         );
       },
     );
@@ -165,25 +164,40 @@ class LoginPage extends StatelessWidget {
               obscureText: true,
               onChanged: bloc.changePassword,
               decoration: InputDecoration(
-                  icon: Icon(Icons.lock_outline, color: Colors.deepPurple),
-                  labelText: 'Contraseña',
-                  counterText: snapshot.data,
-                  errorText: snapshot.error,
-                  ),  
+                icon: Icon(Icons.lock_outline, color: Colors.deepPurple),
+                labelText: 'Contraseña',
+                counterText: snapshot.data,
+                errorText: snapshot.error,
+              ),
             ),
           );
         });
   }
 
-  Widget _createButton() {
-    return RaisedButton(
-        child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
-            child: Text('Ingresar')),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-        elevation: 0.0,
-        color: Colors.deepPurple,
-        textColor: Colors.white,
-        onPressed: () {});
+  Widget _createButton(LoginBloc bloc) {
+    return StreamBuilder(
+      stream: bloc.formValidEmail,
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        return RaisedButton(
+            child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
+                child: Text('Ingresar')),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5.0)),
+            elevation: 0.0,
+            color: Colors.deepPurple,
+            textColor: Colors.white,
+            onPressed: snapshot.hasData?()=>_login(bloc,context):null,
+            );
+      },
+    );
+  }
+
+  _login(LoginBloc bloc,BuildContext context){
+    print('==========');
+    print('email:${bloc.email}');
+    print('Password:${bloc.password}');
+    print('==========');
+    Navigator.pushReplacementNamed (context, 'home');
   }
 }
